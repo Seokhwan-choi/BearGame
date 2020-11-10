@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Fish
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 1
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: a73e6420b14ffcf4cb70a62016c6dcbe, type: 3}
+    totalSpriteSurfaceArea: 9437184
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 81d7e0d178230074d881d25598bdf941, type: 3}
+  - {fileID: 21300000, guid: e1fbe3c2be879ac4c82b1905f1d055bd, type: 3}
+  - {fileID: 21300000, guid: 5caaaed3ea2955140a9a145d96ea4d35, type: 3}
+  - {fileID: 21300000, guid: 5a80db4739e144b46ab1ef8b14558b0b, type: 3}
+  - {fileID: 21300000, guid: f9edad280cd2c6c4a8b29e02813da2b6, type: 3}
+  - {fileID: 21300000, guid: 1cd73d48700890f4c9f6683dfbe39d9c, type: 3}
+  - {fileID: 21300000, guid: 98c5ac4b0fc3f184f917115565cf0a5a, type: 3}
+  - {fileID: 21300000, guid: 64fa9afdd85d71e46bca54a879ca5a0c, type: 3}
+  - {fileID: 21300000, guid: 7244b75ef593f124e88f11752ddcdb6e, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - fish6
+  - fish5
+  - fish7
+  - fish4
+  - fish2
+  - fish1
+  - fish3
+  - Fish9
+  - fish8
+  m_Tag: Fish
+  m_IsVariant: 0
