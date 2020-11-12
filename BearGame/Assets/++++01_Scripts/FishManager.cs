@@ -6,49 +6,63 @@ namespace Bear
 {
     public class FishManager
     {
-        List<GameObject> mFishList;
+        List<Fish> mFishList;
 
-        public List<GameObject> FishList => mFishList;
+        public List<Fish> FishList => mFishList;
         public FishManager()
         {
-            mFishList = new List<GameObject>();
+            mFishList = new List<Fish>();
         }
 
-        public GameObject CreateFish(int areaNumber, int lv, bool isLeft, FishType type)
+        public Fish CreateFish(int areaNumber, int lv, bool isLeft, FishType type)
         {
             // lv를 확인해서 
             // 확률적으로 물고기가 나온다.
             var typeDice = UnityEngine.Random.Range(0, 3);
-            string fishSize = (typeDice == 0 ? "Fish_S" : (typeDice == 1 ? "Fish_M" : "Fish_L"));
+            string fishName = (typeDice == 0 ? "Fish_S" : (typeDice == 1 ? "Fish_M" : "Fish_L"));
             
-            var fish = Bear.ObjectPool.Acquire(fishSize);
-            if ( fish != null )
+            var fishObj = Bear.ObjectPool.Acquire(fishName);
+            if (fishObj != null )
             {
+                var fish = fishObj.GetOrAddComponent<Fish>();
+                fish.Init(UnityEngine.Random.Range(1, 10), false);
+
                 mFishList.Add(fish);
 
-                // 생성된 물고기는 하늘로 날아간다.
-                var rbd = fish.GetComponent<Rigidbody2D>();
-                var directionX = isLeft ? -1 : 1;
-                var highForce = Random.Range(5, 15);
+                FishAddForce(fish, isLeft);
 
-                rbd.AddForce(new Vector2(directionX, highForce), ForceMode2D.Impulse);
-
-                //id로 스프라이트 변경
-                var sprite = fish.GetComponent<Fish>();
-                sprite.Init(UnityEngine.Random.Range(0, 10));
-
+                return fish;
             }
 
-            return fish;
+            return null;
+        }
+
+        public Fish CreateGoldFish(int lv, bool isLeft, FishType type)
+        {
+            var fishObj = Bear.ObjectPool.Acquire("Fish_L");
+            if (fishObj != null)
+            {
+                var fish = fishObj.GetOrAddComponent<Fish>();
+                fish.Init(9, true);
+
+                mFishList.Add(fish);
+
+                FishAddForce(fish, isLeft);
+
+                return fish;
+            }
+
+            return null;
         }
 
         public bool RemoveFish(int index)
         {
             if (mFishList.Count > index)
             {
-                var go = mFishList[index];
-                if (go != null)
+                var fish = mFishList[index];
+                if (fish != null)
                 {
+                    var go = fish.gameObject;
                     go.transform.position = Vector3.zero;
 
                     mFishList.RemoveAt(index);
@@ -60,6 +74,16 @@ namespace Bear
             }
 
             return false;
+        }
+
+        void FishAddForce(Fish fish, bool isLeft)
+        {
+            // 생성된 물고기는 하늘로 날아간다.
+            var rbd = fish.GetComponent<Rigidbody2D>();
+            var directionX = isLeft ? -1 : 1;
+            var highForce = Random.Range(5, 15);
+
+            rbd.AddForce(new Vector2(directionX, highForce), ForceMode2D.Impulse);
         }
     }
 }

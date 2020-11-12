@@ -9,14 +9,17 @@ namespace Bear
     {
         const float TouchDelay = 0.2f;
         const float Fever_TouchDelay = 0.1f;
+        const float Fever_Time = 10f;
+        const float Fever_Gauge = 2;
 
         BearManager mBearManager;
         FishManager mFishManager;
 
         float mTouchDelay;
-        bool mIsLeft;
 
-        
+        float mFeverTime;
+        bool mIsFeverMode;
+        int mFeverGauge;
 
         public TouchManager(GameManager gameManager)
         {
@@ -24,12 +27,12 @@ namespace Bear
             mFishManager = gameManager.FishManager;
 
             mTouchDelay = TouchDelay;
-            
         }
 
         public void Update(float deltaTime)
         {
             mTouchDelay -= deltaTime;
+            mFeverTime -= deltaTime;
             
             if (Input.GetMouseButton(0))
             {
@@ -45,6 +48,11 @@ namespace Bear
 
                 TouchFish(mousePos);
             }
+
+            if (mFeverTime <= 0)
+            {
+                mIsFeverMode = false;
+            }
         }
 
         void TouchFish(Vector2 mousePos)
@@ -55,12 +63,11 @@ namespace Bear
                 // 물고기 획득
                 if (fishList[i].GetComponent<BoxCollider2D>().OverlapPoint(mousePos) )
                 {
-                    if (mFishManager.RemoveFish(i))
+                    bool isGoldFish = fishList[i].IsGoldFish;
+                    if (mFishManager.RemoveFish(i--))
                     {
-                        Bear.LocalData.TotalGold += 100;
-                        //mGoldText.text = Bear.LocalData.TotalGold.ToString();
+                        Bear.LocalData.TotalGold += 100 * (isGoldFish ? 2 : 1);
                         Bear.LocalData.Save();
-                        --i;
                     }
                 }
             }
@@ -70,8 +77,9 @@ namespace Bear
         {
             if (mBearManager.Player.GetComponent<BoxCollider2D>().OverlapPoint(mousePos))
             {
-                mIsLeft = !mIsLeft;
+                bool isLeft = Random.Range(0, 2) == 0 ? true : false;
 
+                // 한번에 생성할 물고기 양
                 int touchPower = 0;
                 if (Bear.LocalData.Upgrades != null && 
                     Bear.LocalData.Upgrades.ContainsKey("TouchPower"))
@@ -79,15 +87,34 @@ namespace Bear
                     touchPower = Bear.LocalData.Upgrades["TouchPower"];
                 }
 
-                for(int i = 0; i < touchPower + 1; ++i)
+                // 피버 게이지 증가
+                if (mIsFeverMode)
                 {
-                    // 물고기 생성
-                    mFishManager.CreateFish(1, 1, mIsLeft,FishType.large);
+                    for(int i = 0; i < touchPower + 1; ++i)
+                    {
+                        mFishManager.CreateGoldFish(1, isLeft, FishType.large);
+                    }
+
+                    mTouchDelay = Fever_TouchDelay;
                 }
+                else
+                {
+                    mFeverGauge++;
+                    if (mFeverGauge >= Fever_Gauge)
+                    {
+                        mFeverGauge = 0;
+                        mIsFeverMode = true;
+                        mFeverTime = Fever_Time;
+                    }
 
-                mTouchDelay = TouchDelay;
+                    // 물고기 생성
+                    for (int i = 0; i < touchPower + 1; ++i)
+                    {
+                        mFishManager.CreateFish(1, 1, isLeft, FishType.large);
+                    }
 
-                // To Do : 피버게이지 획득
+                    mTouchDelay = TouchDelay;
+                }
             }
         }
         

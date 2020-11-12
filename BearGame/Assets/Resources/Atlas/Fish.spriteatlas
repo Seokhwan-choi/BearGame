@@ -64,7 +64,7 @@ SpriteAtlas:
   - fish2
   - fish1
   - fish3
-  - Fish9
+  - fish9
   - fish8
   m_Tag: Fish
   m_IsVariant: 0

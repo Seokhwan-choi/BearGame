@@ -6,13 +6,18 @@ namespace Bear
 {
     public class Fish : MonoBehaviour
     {
-        public void Init(int id)
+        bool mIsGoldFish;
+        public bool IsGoldFish => mIsGoldFish;
+
+        public void Init(int id, bool isGoldFish)
         {
             SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
             if (renderer != null)
             {
                 renderer.sprite = Bear.Atlas.GetSprite($"fish{id}");
             }
+
+            mIsGoldFish = isGoldFish;
         }
 
         private void Update()
