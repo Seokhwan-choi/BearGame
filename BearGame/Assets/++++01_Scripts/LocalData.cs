@@ -16,7 +16,14 @@ namespace Bear
 
 		// Methods
 		public void Save() { LocalDataSerializer.Save(this); }
+		public void Init()
+		{
+			if (Upgrades == null)
+				Upgrades = new Dictionary<string, int>();
 
+			if (FishIndex == null)
+				FishIndex = new Dictionary<int, FishData>();
+		}
 	}
 
 
@@ -92,6 +99,11 @@ namespace Bear
 			Bear.LocalData = MakeNewLocalData(prev);
 
 			Debug.Log("LocalData: Reset");
+		}
+
+		public static void Delete()
+		{
+			PlayerPrefs.DeleteKey(DataPrefKey);
 		}
 	}
 

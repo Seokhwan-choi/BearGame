@@ -42,9 +42,11 @@ namespace Bear
             Atlas.Init();
 
             LocalData = LocalDataSerializer.Load();
+            LocalData.Init();
+            LocalDataSerializer.Delete();
 
             Transform canvas = GameObject.Find("Canvas").transform;
-            GameObject loading = Util.Instantiate("Loading", canvas);
+            Util.Instantiate("Loading", canvas);
 
             Bear.GameManager = go.AddComponent<GameManager>();
             Bear.GameManager.Init();

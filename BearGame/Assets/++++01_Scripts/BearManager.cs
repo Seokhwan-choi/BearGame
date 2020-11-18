@@ -6,17 +6,10 @@ using System.Linq;
 
 namespace Bear
 {
-    public class BearManager
+    public class UpradeManager
     {
         Button[] mButtonList;
-
-        GameObject mPlayer;
-        public GameObject Player => mPlayer;
-        public BearManager()
-        {
-            mPlayer = Util.Instantiate("Player_Bear");
-        }
-
+        
         public void Init()
         {
             InitButton();

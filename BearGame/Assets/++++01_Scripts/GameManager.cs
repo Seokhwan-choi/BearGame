@@ -6,25 +6,28 @@ namespace Bear
 { 
     public class GameManager : MonoBehaviour
     {
-        BearManager mBearManager;
         FishManager mFishManager;
         TouchManager mTouchManager;
+        UpgradeManager mUpgradeManager;
 
+        GameObject mPlayer;
         ModalUI mModalUI;
         HUDManager mHUDManager;
-        public BearManager BearManager => mBearManager;
+        
+        public GameObject Player => mPlayer;
+        public UpgradeManager UpgradeManager => mUpgradeManager;
         public FishManager FishManager => mFishManager;
         
         public void Init()
         {
-            mBearManager = new BearManager();
-            mBearManager.Init();
+            mPlayer = Util.Instantiate("Player_Bear");
 
             mFishManager = new FishManager();
             mTouchManager = new TouchManager(this);
+            mUpgradeManager = new UpgradeManager();
 
             mModalUI = new ModalUI();
-            mModalUI.Init();
+            mModalUI.Init(mUpgradeManager);
 
             mHUDManager = new HUDManager();
             mHUDManager.Init();

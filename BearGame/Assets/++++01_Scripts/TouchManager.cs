@@ -12,7 +12,7 @@ namespace Bear
         const float Fever_Time = 10f;
         const float Fever_Gauge = 2;
 
-        BearManager mBearManager;
+        GameObject mPlayer;
         FishManager mFishManager;
 
         float mTouchDelay;
@@ -23,7 +23,7 @@ namespace Bear
 
         public TouchManager(GameManager gameManager)
         {
-            mBearManager = gameManager.BearManager;
+            mPlayer = gameManager.Player;
             mFishManager = gameManager.FishManager;
 
             mTouchDelay = TouchDelay;
@@ -75,7 +75,7 @@ namespace Bear
 
         void TouchBear(Vector2 mousePos)
         {
-            if (mBearManager.Player.GetComponent<BoxCollider2D>().OverlapPoint(mousePos))
+            if (mPlayer.GetComponent<BoxCollider2D>().OverlapPoint(mousePos))
             {
                 bool isLeft = Random.Range(0, 2) == 0 ? true : false;
 
