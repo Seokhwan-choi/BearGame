@@ -41,9 +41,9 @@ namespace Bear
             Atlas = new PreLoad();
             Atlas.Init();
 
+            LocalDataSerializer.Delete();
             LocalData = LocalDataSerializer.Load();
             LocalData.Init();
-            LocalDataSerializer.Delete();
 
             Transform canvas = GameObject.Find("Canvas").transform;
             Util.Instantiate("Loading", canvas);

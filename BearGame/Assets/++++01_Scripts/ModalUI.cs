@@ -9,140 +9,92 @@ namespace Bear
 {
     public class ModalUI
     {
-        GameObject modal;
-        GameObject mModalUI;
-        Button mOpenButton;
-        Button mCloseButton;
-        RectTransform mRectTransform;
+        static readonly string[] MenuName = new string[] { "Upgrade", "FishIndex", "Setting" };
 
-        GameObject mUpgrade;
-        GameObject mFishIndex;
-        GameObject mSetting;
-        GameObject mUpgradeTabButton;
-        GameObject mFishIndexTabButton;
-        GameObject mSettingTabButton;
-
-        UpgradeManager mUpgradeManager;
+        List<GameObject> mMenuList;
+        List<GameObject> mTabButtonList;
         Dictionary<string, GameObject> mUpgradeButtonList;
-
-        Color EnabledColor = Color.cyan;
-        Color DisabledColor = Color.gray;
-
+        UpgradeManager mUpgradeManager;
         public void Init(UpgradeManager upgradeManager)
         {
+            Close();
+
             mUpgradeManager = upgradeManager;
-            modal = Resources.Load<GameObject>("OBJ/UI_Modal");
-
-            mOpenButton = GameObject.Find("ButtonMenu").Get<Button>();
-            mOpenButton.onClick.AddListener(CreateUI);
-
+            mMenuList = new List<GameObject>();
+            mTabButtonList = new List<GameObject>();
             mUpgradeButtonList = new Dictionary<string, GameObject>();
+
+            var modal = Util.InstantiateUI("UI_Modal");
+
+            InitMenuAndButton(modal);
+            InitUpgradeData(); //업그레이드 데이터
+
+            ShowMenu(0);
         }
 
-        public void OnClick() 
+        void OnCloseButton()
         {
-            CreateUI();//생성
-            
-            ShowUpgrade(); //최초 업글창오픈으로 초기화
-            ChangButtonColor();  //서브탭버튼 맞춰서 초기화
+            // 사운드
+            Close();
         }
 
-
-        void CreateUI()
+        void Close()
         {
-            Transform canvas = GameObject.Find("Canvas").transform;
-
-            mModalUI = GameObject.Instantiate(modal);
-            mModalUI.transform.SetParent(canvas);
-            mModalUI.transform.localScale = Vector3.one;
-            mModalUI.transform.localPosition = new Vector3(0, 0, 0);
-
-            mRectTransform = mModalUI.GetComponent<RectTransform>();
-            mRectTransform.offsetMin = new Vector2(0, 0);
-            mRectTransform.offsetMax = new Vector2(0, 0);
-
-            //닫기 버튼
-            mCloseButton = GameObject.Find("ButtonClose").Get<Button>();
-
-            //서브탭버튼
-            mUpgradeTabButton = GameObject.Find("UpgradeButton");
-            mFishIndexTabButton = GameObject.Find("FishIndexButton");
-            mSettingTabButton = GameObject.Find("SettingButton");
-            
-            //서브탭 내 메뉴
-            mUpgrade = GameObject.Find("Menu1");
-            mFishIndex = GameObject.Find("Menu2");
-            mSetting = GameObject.Find("Menu3");
-            
-            //버튼 이벤트
-            mCloseButton.onClick.AddListener(DestroyUI);
-            mUpgradeTabButton.Get<Button>().onClick.AddListener(ShowUpgrade);
-            mFishIndexTabButton.Get<Button>().onClick.AddListener(ShowFishIndex);
-            mSettingTabButton.Get<Button>().onClick.AddListener(ShowSetting);
-
-            //업그레이드 데이터
-            ReadUpradeData(); 
+            var modal = GameObject.Find("UI_Modal");
+            if ( modal != null )
+            {
+                modal.Destroy();
+            }
+           
+            mUpgradeButtonList?.Clear();
         }
 
-        void DestroyUI()
+        void InitMenuAndButton(GameObject modal)
         {
-            mModalUI.Destroy();
-            mUpgradeButtonList.Clear();
+            // 닫기 버튼
+            var closeButton = modal.Find("ButtonClose").Get<Button>();
+            closeButton.onClick.AddListener(OnCloseButton);
+
+            // 메뉴 & 탭 버튼
+            for (int i = 0; i < MenuName.Length; ++i)
+            {
+                var menu = modal.Find($"{MenuName[i]}_Menu");
+                mMenuList.Add(menu);
+
+                var button = modal.Find($"{MenuName[i]}Button");
+                int index = i;
+                button.Get<Button>().onClick.AddListener(() => ShowMenu(index));
+                mTabButtonList.Add(button);
+            }
         }
 
-
-        public void ShowUpgrade()
+        void ShowMenu(int index)
         {
-            mUpgrade.SetActive(true);
-            mFishIndex.SetActive(false);
-            mSetting.SetActive(false);
-            
-            ChangButtonColor();            
+            index = Mathf.Clamp(index, 0, MenuName.Length - 1);
+                
+            for(int i = 0; i < MenuName.Length; ++i)
+            {
+                if (index == i)
+                {
+                    mTabButtonList[i].GetComponent<Image>().color = Color.cyan;
+                    mMenuList[i].SetActive(true);
+                }
+                else
+                {
+                    mTabButtonList[i].GetComponent<Image>().color = Color.gray;
+                    mMenuList[i].SetActive(false);
+                }
+            }
         }
 
-        public void ShowFishIndex()
+        void InitUpgradeData()
         {
-            mUpgrade.SetActive(false);
-            mFishIndex.SetActive(true);
-            mSetting.SetActive(false);
-
-            ChangButtonColor();
-        }
-
-        public void ShowSetting()
-        {
-            mUpgrade.SetActive(false);
-            mFishIndex.SetActive(false);
-            mSetting.SetActive(true);
-
-            ChangButtonColor();
-        }
-
-        public void ChangButtonColor()
-        {
-            //탭 색상 변경
-            mUpgradeTabButton.GetComponent<Image>().color = mUpgrade.activeSelf ? EnabledColor : DisabledColor;
-            mFishIndexTabButton.GetComponent<Image>().color = mFishIndex.activeSelf ? EnabledColor : DisabledColor;
-            mSettingTabButton.GetComponent<Image>().color = mSetting.activeSelf ? EnabledColor : DisabledColor;
-        }
-
-        public void UpgradeList()
-        {
-
-            
-        }
-
-        public void ReadUpradeData()
-        {
-            Transform canvas = GameObject.Find("Upgrade").transform;
+            Transform parent = GameObject.Find("Upgrade").transform;
             //오브젝트 로드-데이터 넣기-버튼을 누를때 받을 수 있는 변수제작-캔버스/모달/아래 생성
             foreach (UpgradeData data in Bear.GameData.UpgradeData.Values)
             {
                 //박스하나 프리팹을 가져와서 생성, 모달 아래에 붙여서 초기화
-                var upgradeListBox = Util.Instantiate("Upgrade_List");
-                upgradeListBox.transform.SetParent(canvas);
-                upgradeListBox.transform.localScale = Vector3.one;
-                upgradeListBox.transform.localPosition = new Vector3(0, 0, 0);
+                var upgradeListBox = Util.Instantiate("Upgrade_List", parent);
 
                 mUpgradeButtonList.Add(data.id, upgradeListBox);
 
@@ -178,6 +130,7 @@ namespace Bear
                     Text buttonText = button.Find("Text").GetComponent<Text>();
                     buttonText.text = level + "\r\n" + gold;
 
+                    button.GetComponent<Button>().onClick.RemoveAllListeners();
                     button.GetComponent<Button>().onClick.AddListener(() => OnUpgradeButton(data.id));
                 }
             }

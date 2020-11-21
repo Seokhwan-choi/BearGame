@@ -59,6 +59,25 @@ namespace Bear
             return go;
         }
 
+        public static GameObject InstantiateUI(string prefabPath, Transform parent = null)
+        {
+            if (parent == null)
+            {
+                parent = GameObject.Find("Canvas")?.transform ?? null;
+            }
+
+            var go = Instantiate(prefabPath, parent);
+
+            var rectTm = go.GetComponent<RectTransform>();
+            if (rectTm != null)
+            {
+                rectTm.offsetMin = new Vector2(0, 0);
+                rectTm.offsetMax = new Vector2(0, 0);
+            }
+
+            return go;
+        }
+
         public static GameObject Find(this GameObject go, string name, bool includeinactive = false)
         {
             if (go != null)
