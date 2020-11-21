@@ -11,11 +11,10 @@ namespace Bear
         UpgradeManager mUpgradeManager;
 
         GameObject mPlayer;
-        ModalUI mModalUI;
+        LobbyUI mLobbyUI;
         HUDManager mHUDManager;
         
         public GameObject Player => mPlayer;
-        public UpgradeManager UpgradeManager => mUpgradeManager;
         public FishManager FishManager => mFishManager;
         
         public void Init()
@@ -26,8 +25,8 @@ namespace Bear
             mTouchManager = new TouchManager(this);
             mUpgradeManager = new UpgradeManager();
 
-            mModalUI = new ModalUI();
-            mModalUI.Init(mUpgradeManager);
+            mLobbyUI = new LobbyUI();
+            mLobbyUI.Init(mUpgradeManager);
 
             mHUDManager = new HUDManager();
             mHUDManager.Init();

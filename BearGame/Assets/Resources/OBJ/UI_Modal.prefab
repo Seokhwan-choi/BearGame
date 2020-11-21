@@ -738,7 +738,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1939659079785125129}
   m_Layer: 5
-  m_Name: Menu2
+  m_Name: FishIndex_Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1057,7 +1057,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1939659079907752123}
   m_Layer: 5
-  m_Name: Menu1
+  m_Name: Upgrade_Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1964,7 +1964,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1939659081596957858}
   m_HandleRect: {fileID: 1939659081596957859}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4087,7 +4087,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1939659081762365717}
   m_HandleRect: {fileID: 1939659081762365714}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4447,7 +4447,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1939659081468740987}
   m_Layer: 5
-  m_Name: Menu3
+  m_Name: Setting_Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
